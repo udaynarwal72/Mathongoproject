@@ -23,9 +23,9 @@ const importUser = async (req, res) => {
         var userData = [];
         console.log(req.file.path);
         console.log(req.file.path);
-        const filepath = path.join(process.cwd(), req.file.path);
+        // const filepath = path.join(process.cwd(), req.file.path);
         console.log(filepath);
-        const response = await csv().fromFile(filepath);
+        const response = await csv().fromFile(req.file.path);
         const csvKey = Object.keys(response[0]);
         const lists = await userlist.find();
         const propertyTitleLength = lists[0].customProperties.length;
