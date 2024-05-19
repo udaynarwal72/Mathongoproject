@@ -7,6 +7,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const uploadDir = path.resolve(__dirname, '../public/uploads');
+const fs = require('fs');
 
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
