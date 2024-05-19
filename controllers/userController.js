@@ -105,7 +105,7 @@ const writeErrorToCSV = (errors) => {
     //     process.env.NODE_ENV === 'production' ? 'static' : 'public',
     //     'usercsv.csv'
     // )
-    const csvFilePath = path.resolve(process.cwd(), 'error_log.csv');
+    const csvFilePath = path.resolve(process.pwd(), 'error_log.csv');
     const errorData = errors.map(error => ({
         'Error Message': error.message,
         'User Data': JSON.stringify(error.userData)

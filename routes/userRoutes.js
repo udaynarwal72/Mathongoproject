@@ -19,7 +19,7 @@ router.use(cors({
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const pathway = path.resolve(process.pwd(), 'public/uploads/');
+        const pathway = path.resolve(process.cwd(), 'public/uploads/');
         cb(null, pathway);
     },
     filename: (req, file, cb) => {
