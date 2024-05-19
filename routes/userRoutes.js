@@ -6,6 +6,12 @@ const multer = require('multer');
 const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const uploadDir = path.resolve(__dirname, '../public/uploads');
+
+if (!fs.existsSync(uploadDir)) {
+    fs.mkdirSync(uploadDir, { recursive: true });
+}
+
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(express.static(path.resolve(__dirname, 'public')));//to access the files in public folder
 router.use(express.json());
@@ -18,7 +24,7 @@ router.use(cors({
 }));
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, './public/uploads');
+        cb(null, uploadDir);
     },
     filename: (req, file, cb) => {
         cb(null, file.originalname);
