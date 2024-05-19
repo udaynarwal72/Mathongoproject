@@ -1,2 +1,5 @@
 "Error Message","User Data"
+"E11000 duplicate key error collection: test.myuserdetails index: email_1 dup key: { email: ""udaynarsadfgwal@gmail.com"" }","{""name"":""udaynarwal"",""email"":""udaynarsadfgwal@gmail.com"",""city"":""kurukshetra"",""gender"":""male""}""Error Message","User Data"
+"process.new is not a function","{}""Error Message","User Data"
+"File does not exist. Check to make sure the file path to your csv is correct.","{}""Error Message","User Data"
 "E11000 duplicate key error collection: test.myuserdetails index: email_1 dup key: { email: ""udaynarsadfgwal@gmail.com"" }","{""name"":""udaynarwal"",""email"":""udaynarsadfgwal@gmail.com"",""city"":""kurukshetra"",""gender"":""male""}"
