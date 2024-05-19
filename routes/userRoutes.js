@@ -25,7 +25,7 @@ const storage = multer.diskStorage({
     }
 });
 
-const upload = multer({ dest: 'public/uploads/' });
+const upload = multer({ dest: '/tmp/uploads/' });
 //1st task
 router.post('/', (req, res) => {
     res.send('Hello World');
