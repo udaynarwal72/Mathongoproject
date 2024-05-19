@@ -13,7 +13,7 @@ app.use(express.json());
 // connecting vercel
 app.use(cors({
     origin: ["https://mathongoproject-az32.vercel.app"],
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    methods: ['GET', 'POST'],
     credentials: true
 
 }));

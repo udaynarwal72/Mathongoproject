@@ -10,7 +10,7 @@ router.use(bodyParser.urlencoded({ extended: true }));
 router.use(express.static(path.resolve(__dirname, 'public')));//to access the files in public folder
 router.use(express.json());
 
-app.use(cors({
+router.use(cors({
     origin: ["https://mathongoproject.vercel.app"],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
