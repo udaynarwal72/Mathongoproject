@@ -114,7 +114,7 @@ const importUser = async (req, res) => {
     try {
         var userData = [];
         console.log(req.file.path);
-        const filepath = path.join(process.cwd(),req.file.path);
+        const filepath = '/' + req.file.path;
         console.log(filepath);
         const response = await csv().fromFile(filepath);
         const csvKey = Object.keys(response[0]);
@@ -158,7 +158,7 @@ const importUser = async (req, res) => {
             let successCount = 0;
             let failCount = 0;
             const errors = [];
-            
+
             for (const user of userData) {
                 try {
                     await UserDetail.create(user);
