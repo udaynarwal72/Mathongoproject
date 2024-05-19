@@ -11,12 +11,12 @@ app.use('/', userRoute);
 app.use(express.json());
 
 // connecting vercel
-app.use(cors({
-    origin: ["https://mathongoproject-az32.vercel.app"],
-    methods: ['GET', 'POST'],
-    credentials: true
+// app.use(cors({
+//     origin: ["https://mathongoproject-az32.vercel.app"],
+//     methods: ['GET', 'POST'],
+//     credentials: true
 
-}));
+// }));
 
 // Connecting to the database
 mongoose.connect(process.env.MONG_URI, { useNewUrlParser: true, useUnifiedTopology: true }) // Ensure you use these options for mongoose
