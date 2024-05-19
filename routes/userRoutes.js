@@ -46,6 +46,6 @@ const userHead = require('../controllers/userEmailSend');
 const UserHeaderDetail = require('../controllers/userListController');
 router.post('/userhead', UserHeaderDetail.createList);
 const userunsubscribe = require('../controllers/userUnsubscribe');
-router.get('/unsubscribe/:id',userunsubscribe.userUnsubscribe);
+router.get('/unsubscribe/:id', userunsubscribe.userUnsubscribe);
 
 module.exports = router;
