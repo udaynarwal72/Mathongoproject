@@ -8,22 +8,13 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const fs = require('fs');
 
-const uploadDir = '/tmp/uploads';
+const uploadDir = path.resolve(__dirname, '../public/uploads');
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
 }
 
-const filePath = '/var/tmp/uploads/error_log.csv';
-fs.chmod(filePath, 0o666, (err) => {
-    if (err) {
-      console.error('Error changing file mode:', err);
-    } else {
-      console.log('File mode changed to write');
-    }
-  });
-
 router.use(bodyParser.urlencoded({ extended: true }));
-router.use(express.static(path.resolve(__dirname, 'tmp')));//to access the files in public folder
+router.use(express.static(path.resolve(__dirname, 'public')));//to access the files in public folder
 router.use(express.json());
 
 router.use(cors({
