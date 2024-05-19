@@ -6,9 +6,9 @@ const multer = require('multer');
 const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const uploadDir = path.resolve(__dirname, '../public/uploads');
 const fs = require('fs');
 
+const uploadDir = '/tmp/uploads';
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
 }
