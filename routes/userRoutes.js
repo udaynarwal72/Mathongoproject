@@ -70,7 +70,8 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const fs = require('fs');
 
-const uploadDir = path.resolve(__dirname, '../public/uploads');
+// Use the /tmp directory for file uploads in environments with read-only file systems
+const uploadDir = path.resolve('/tmp/uploads');
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
 }
@@ -80,16 +81,7 @@ router.use(bodyParser.urlencoded({ extended: true }));
 router.use(express.json());
 
 // Serve static files from the public directory
-router.use(express.static(path.resolve(__dirname, '../public'))); // Corrected path
-
-// Set permissions for the uploads directory
-fs.chmod(uploadDir, 0o666, (err) => {
-    if (err) {
-        console.error('Error changing directory mode:', err);
-    } else {
-        console.log('Directory mode changed to write');
-    }
-});
+router.use(express.static(path.resolve(__dirname, '../public')));
 
 // CORS configuration
 router.use(cors({
