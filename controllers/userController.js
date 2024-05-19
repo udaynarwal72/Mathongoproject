@@ -23,7 +23,7 @@ const importUser = async (req, res) => {
         var userData = [];
         console.log(req.file.path);
         console.log(req.file.path);
-        const filepath = path.join('/tmp', req.file.path);
+        const filepath = path.join(__dirname, req.file.path);
         console.log(filepath);
         const response = await csv().fromFile(filepath);
         const csvKey = Object.keys(response[0]);
