@@ -26,7 +26,7 @@ const sendUserEmail = async (req, res) => {
                 to: user.email, // list of receivers
                 subject: "Welcome, to mathongo", // Subject line
                 text: `Hello, ${user.name}`,     // plain text body
-                html: `<span> Hey ${user.name}!</span> <br> Thankyou for signing up with your email ${user.email}. We have received your city as ${user.city}<br> Team Mathongo <a href="https://mathongoproject.vercel.app/unsubscribe/${user._id}">Unsubscribe</a>`, // html body
+                html: `Hey ${user.name}! <br> Thankyou for signing up with your email ${user.email}. We have received your city as ${user.city}<br> Team Mathongo <a href="https://mathongoproject.vercel.app/unsubscribe/${user._id}">Unsubscribe</a>`, // html body
             });
         }
     }
