@@ -21,6 +21,9 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 //1st task
+router.post('/', (req, res) => {
+    res.send('Hello World');
+});
 const userlist = require('../controllers/userListController');
 router.post('/userlist', userlist.createList);
 //2nd task
