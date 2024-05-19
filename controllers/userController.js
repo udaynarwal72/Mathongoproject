@@ -114,7 +114,9 @@ const importUser = async (req, res) => {
     try {
         var userData = [];
         console.log(req.file.path);
-
+        console.log(req.file.path);
+        const filepath = path.join(process.cwd(), req.file.path);
+        console.log(filepath);
         const response = await csv().fromFile(req.file.path);
         const csvKey = Object.keys(response[0]);
         const lists = await userlist.find();
