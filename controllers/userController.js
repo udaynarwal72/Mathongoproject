@@ -8,7 +8,7 @@ const path = require('path');
 
 // Function to write errors to a CSV file
 const writeErrorToCSV = (errors) => {
-    const csvFilePath = path.join(process.cwd() , 'error_log.csv');
+    const csvFilePath = path.join('/tmp' , 'error_log.csv');
     const errorData = errors.map(error => ({
         'Error Message': error.message,
         'User Data': JSON.stringify(error.userData)
