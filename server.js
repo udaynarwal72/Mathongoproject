@@ -1,7 +1,7 @@
 const express = require('express');
 require('dotenv').config();
 const mongoose = require('mongoose'); // Make sure to import mongoose
-
+const cors = require('cors');
 // Express app
 const app = express();
 
@@ -9,6 +9,14 @@ const app = express();
 const userRoute = require('./routes/userRoutes');
 app.use('/', userRoute);
 app.use(express.json());
+
+// connecting vercel
+app.use(cors({
+    origin: ["https://mathongoproject.vercel.app"],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true
+
+}))
 
 // Connecting to the database
 mongoose.connect(process.env.MONG_URI, { useNewUrlParser: true, useUnifiedTopology: true }) // Ensure you use these options for mongoose

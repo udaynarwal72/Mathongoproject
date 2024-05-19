@@ -1,8 +1,6 @@
 const nodemailer = require('nodemailer'); // Make sure to import nodemailer  
 require("dotenv").config();
-const path = require('path');
 const UserDetail = require('../model/userModel');
-const mongoose = require('mongoose');
 
 const sendUserEmail = async (req, res) => {
 
@@ -12,21 +10,12 @@ const sendUserEmail = async (req, res) => {
         port: 587,
         secure: false,
         auth: {
-            user: "udaynarwal8860@gmail.com",
-            pass: "rtkh parq rvhg sdwo",
+            user: process.env.ADMIN_MAIL,
+            pass: process.env.ADMIN_PASSWORD,
         }
     });;
-    // printing user name from UserDetail model
     const parentuser = await UserDetail.find();
-    // for(user in parentuser){
-    //     console.log(user[0].email);
-    // }
 
-    // for (const user of parentuser) {
-    //     console.log(user.email);
-    // }
-    console.log(parentuser[0].city);
-    const user = parentuser[0];
     for (const user of parentuser) {
         if (user.pushemail == true) {
             let mailOptions = await transporter.sendMail({
