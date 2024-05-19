@@ -5,11 +5,17 @@ const router = express.Router();
 const multer = require('multer');
 const path = require('path');
 const bodyParser = require('body-parser');
-
+const cors = require('cors');
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(express.static(path.resolve(__dirname, 'public')));//to access the files in public folder
 router.use(express.json());
 
+app.use(cors({
+    origin: ["https://mathongoproject.vercel.app"],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true
+
+}));
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, './public/uploads');
