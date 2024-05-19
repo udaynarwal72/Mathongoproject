@@ -117,31 +117,48 @@
 //     importUser,
 // };
 
-
 const UserDetail = require('../model/userModel');
 const userlist = require('../model/userlist');
 const csv = require('csvtojson');
 const json2csv = require('json2csv').parse;
 const fs = require('fs');
 const path = require('path');
+const aws = require('aws-sdk');
+
+const s3 = new aws.S3();
 
 // Function to write errors to a CSV file
 const writeErrorToCSV = (errors) => {
+    if (errors.length === 0) {
+        return null; // No errors to write
+    }
+
     const csvFilePath = path.join('/tmp', 'error_log.csv'); // Use /tmp directory
     const errorData = errors.map(error => ({
         'Error Message': error.message,
         'User Data': JSON.stringify(error.userData)
     }));
-    const csvContent = json2csv(errorData,{fields});
-    fs.writeFileSync(csvFilePath, csvContent, { flag: 'a' },);
+
+    // Specify fields for json2csv
+    const fields = ['Error Message', 'User Data'];
+
+    const csvContent = json2csv(errorData, { fields });
+    fs.writeFileSync(csvFilePath, csvContent, { flag: 'a' });
     return csvFilePath;
 };
 
 const importUser = async (req, res) => {
     try {
         const userData = [];
-        const filepath = req.file.path; // File is already in /tmp/uploads
-        const response = await csv().fromFile(filepath);
+
+        const params = {
+            Bucket: process.env.AWS_BUCKET_NAME,
+            Key: req.file.originalname
+        };
+
+        const data = await s3.getObject(params).promise();
+        const csvContent = data.Body.toString('utf-8');
+        const response = await csv().fromString(csvContent);
 
         const csvKey = Object.keys(response[0]);
         const lists = await userlist.find();
@@ -199,15 +216,20 @@ const importUser = async (req, res) => {
         const csvFilePath = writeErrorToCSV(errors);
         const totalUserCount = await UserDetail.countDocuments();
 
-        res.send({
+        const responsePayload = {
             status: 200,
             success: true,
             message: 'User import completed',
             successfullyAdded: successCount,
             failedToAdd: failCount,
-            totalUsersInDatabase: totalUserCount,
-            errorLogFile: csvFilePath
-        });
+            totalUsersInDatabase: totalUserCount
+        };
+
+        if (csvFilePath) {
+            responsePayload.errorLogFile = csvFilePath;
+        }
+
+        res.send(responsePayload);
     } catch (err) {
         const csvFilePath = writeErrorToCSV([{ message: err.message, userData: {} }]);
         res.status(400).send({
