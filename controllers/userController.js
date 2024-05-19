@@ -169,7 +169,6 @@ const importUser = async (req, res) => {
                     errors.push({ message: error.message, userData: user });
                 }
             }
-
             const csvFilePath = writeErrorToCSV(errors);
             const totalUserCount = await UserDetail.countDocuments();
 
