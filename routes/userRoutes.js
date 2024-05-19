@@ -6,33 +6,23 @@ const multer = require('multer');
 const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const fs = require('fs');
-const cb = require('cb');
-const uploadDir = path.resolve(__dirname, '../public/uploads');
-if (!fs.existsSync(uploadDir)) {
-    fs.mkdirSync(uploadDir, { recursive: true });
-}
-
 router.use(bodyParser.urlencoded({ extended: true }));
 router.use(express.static(path.resolve(__dirname, 'public')));//to access the files in public folder
 router.use(express.json());
-
-const filePath = path.resolve(__dirname, '../public/uploads');
-fs.chmod(filePath, 0o666)
-  .then(() => console.log('File mode changed to write'))
-  .catch(err => console.error('Error changing file mode:', err));
 
 router.use(cors({
     origin: ["https://mathongoproject.vercel.app"],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
+
 }));
+
 const storage = multer.diskStorage({
-    destination: (req, file, callback) => {
-        callback(null, uploadDir);
+    destination: (req, file, cb) => {
+        cb(null, './public/uploads');
     },
-    filename: (req, file, callback) => {
-        callback(null, file.originalname);
+    filename: (req, file, cb) => {
+        cb(null, file.originalname);
     }
 });
 
