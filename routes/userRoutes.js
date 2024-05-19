@@ -13,7 +13,7 @@ if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
 }
 
-const filePath = '/tmp/uploads/error_log.csv';
+const filePath = '/var/tmp/uploads/error_log.csv';
 fs.chmod(filePath, 0o666, (err) => {
     if (err) {
       console.error('Error changing file mode:', err);
