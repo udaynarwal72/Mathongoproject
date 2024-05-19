@@ -14,10 +14,14 @@ const createList = async (req, res) => {
         if (list) {
             return res.status(400).json({ message: "List already exists" });
         }
-
-        const newList = new List(req.body);
-        await newList.save();
-        res.status(201).json(newList);
+        try {
+            const newList = new List(req.body);
+            await newList.save();
+            res.status(201).json(newList);
+        } catch (err) {
+            console.log(err);
+            res.status(400).json({ message: message.err });
+        }
     } catch (err) {
         console.log(err)
         res.status(400).json({ message: "error" });

@@ -34,8 +34,6 @@
 //                         allCustomPropertiesTitles.push(property.title);
 //                     });
 //                 });
-
-//                 const propertytitle = lists[0].customProperties[0].title;
 //                 const propertydefault = lists[0].customProperties[0].defaultValue;
 //                 var valueToTake = [];
 //                 valueToTake.push('name', 'email');
@@ -80,7 +78,7 @@
 //                     res.send({ status: 200, success: true, message: 'Data inserted successfully' });
 //                 } catch (err) {
 //                     const csvFilePath = writeErrorToCSV(err);
-//                     res.status(400).send({ sucess: false, message: err.message })
+//                     res.status(400).send({ sucess: false, message: err.message,"cout of user sucessfully added":,  })
 //                 }
 //             })
 //     } catch (err) {
@@ -101,68 +99,108 @@ const fs = require('fs');
 const path = require('path');
 
 // Function to write errors to a CSV file
-const writeErrorToCSV = (error) => {
+const writeErrorToCSV = (errors) => {
     const csvFilePath = path.join(__dirname, 'error_log.csv');
-    const errorData = [{
-        "Error Message": error.message
-    }];
-    const csvData = json2csv(errorData, { fields: ["Error Message"] });
-    fs.writeFileSync(csvFilePath, csvData, { flag: 'a' });
+    const errorData = errors.map(error => ({
+        'Error Message': error.message,
+        'User Data': JSON.stringify(error.userData)
+    }));
+    const csvContent = json2csv(errorData);
+    fs.writeFileSync(csvFilePath, csvContent, { flag: 'a' });
     return csvFilePath;
 };
 
 const importUser = async (req, res) => {
     try {
-        const userData = [];
+        var userData = [];
         console.log(req.file.path);
 
         const response = await csv().fromFile(req.file.path);
-
-        const csvKeys = Object.keys(response[0]);
+        const csvKey = Object.keys(response[0]);
         const lists = await userlist.find();
-        const allCustomPropertiesTitles = lists.flatMap(list =>
-            list.customProperties.map(property => property.title)
-        );
+        const propertyTitleLength = lists[0].customProperties.length;
+        const allCustomPropertiesTitles = [];
+        lists.forEach(list => {
+            list.customProperties.forEach(property => {
+                allCustomPropertiesTitles.push(property.title);
+            });
+        });
+        const propertydefault = lists[0].customProperties[0].defaultValue;
+        var valueToTake = ['name', 'email'];
 
-        const propertyDefault = lists[0].customProperties[0].defaultValue;
-        const valueToTake = ['name', 'email', ...allCustomPropertiesTitles];
+        // Pushing value present in customProperties of list to valueToTake array
+        lists.forEach(list => {
+            list.customProperties.forEach(property => {
+                valueToTake.push(property.title);
+            });
+        });
 
-        for (let i = 0; i < response.length; i++) {
-            const record = response[i];
-            const obj = {};
-            for (let j = 0; j < valueToTake.length; j++) {
-                const key = valueToTake[j];
-                obj[key] = record[key] || (key !== 'name' && key !== 'email');
-            }
+        response.forEach(row => {
+            var obj = {};
+            valueToTake.forEach(field => {
+                obj[field] = row[field] === '' && field !== 'name' && field !== 'email' ? propertydefault : row[field];
+            });
             userData.push(obj);
-        }
+        });
 
         console.log(userData);
 
         try {
-            // Fetch the existing keys in the schema
             const existingKeys = Object.keys(UserDetail.schema.paths);
-            // Fetch the keys present in the userData
             const userDataKeys = Object.keys(userData[0]);
-            // Identify new keys that are not present in the schema
             const newKeys = userDataKeys.filter(key => !existingKeys.includes(key));
-            // Dynamically update the schema to include new keys
             newKeys.forEach(newKey => {
-                UserDetail.schema.add({ [newKey]: String }); // Assuming all new fields are strings
+                UserDetail.schema.add({ [newKey]: String });
             });
-            // Save the updated schema
             await UserDetail.init();
-            // Insert userData into the database
-            await UserDetail.insertMany(userData);
-            console.log('Data inserted successfully');
-            res.send({ status: 200, success: true, message: 'Data inserted successfully' });
+
+            let successCount = 0;
+            let failCount = 0;
+            const errors = [];
+
+            for (const user of userData) {
+                try {
+                    await UserDetail.create(user);
+                    successCount++;
+                } catch (error) {
+                    failCount++;
+                    errors.push({ message: error.message, userData: user });
+                }
+            }
+
+            const csvFilePath = writeErrorToCSV(errors);
+            const totalUserCount = await UserDetail.countDocuments();
+
+            res.send({
+                status: 200,
+                success: true,
+                message: 'User import completed',
+                successfullyAdded: successCount,
+                failedToAdd: failCount,
+                totalUsersInDatabase: totalUserCount,
+                errorLogFile: csvFilePath
+            });
         } catch (err) {
-            const csvFilePath = writeErrorToCSV(err);
-            res.status(400).send({ success: false, message: err.message });
+            const csvFilePath = writeErrorToCSV([{ message: err.message, userData: {} }]);
+            res.status(400).send({
+                success: false,
+                message: err.message,
+                successfullyAdded: 0,
+                failedToAdd: userData.length,
+                totalUsersInDatabase: await UserDetail.countDocuments(),
+                errorLogFile: csvFilePath
+            });
         }
     } catch (err) {
-        const csvFilePath = writeErrorToCSV(err);
-        res.status(400).send({ success: false, message: err.message });
+        const csvFilePath = writeErrorToCSV([{ message: err.message, userData: {} }]);
+        res.status(400).send({
+            success: false,
+            message: err.message,
+            successfullyAdded: 0,
+            failedToAdd: 0,
+            totalUsersInDatabase: await UserDetail.countDocuments(),
+            errorLogFile: csvFilePath
+        });
     }
 };
 
