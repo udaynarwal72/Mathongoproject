@@ -17,6 +17,11 @@ router.use(bodyParser.urlencoded({ extended: true }));
 router.use(express.static(path.resolve(__dirname, 'public')));//to access the files in public folder
 router.use(express.json());
 
+const filePath = path.resolve(__dirname, '../public/uploads');
+fs.chmod(filePath, 0o666)
+  .then(() => console.log('File mode changed to write'))
+  .catch(err => console.error('Error changing file mode:', err));
+
 router.use(cors({
     origin: ["https://mathongoproject.vercel.app"],
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
