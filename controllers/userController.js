@@ -116,7 +116,6 @@
 // module.exports = {
 //     importUser,
 // };
-
 const UserDetail = require('../model/userModel');
 const userlist = require('../model/userlist');
 const csv = require('csvtojson');
@@ -149,10 +148,15 @@ const writeErrorToCSV = (errors) => {
 
 const importUser = async (req, res) => {
     try {
+        const bucketName = process.env.AWS_BUCKET_NAME;
+        if (!bucketName) {
+            throw new Error('AWS_BUCKET_NAME environment variable is not set');
+        }
+
         const userData = [];
 
         const params = {
-            Bucket: process.env.AWS_BUCKET_NAME,
+            Bucket: bucketName,
             Key: req.file.originalname
         };
 
