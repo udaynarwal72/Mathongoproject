@@ -13,7 +13,7 @@ if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir, { recursive: true });
 }
 
-const filePath = '/tmp/error_log.csv';
+const filePath = '/tmp/uploads/error_log.csv';
 fs.chmod(filePath, 0o666, (err) => {
     if (err) {
       console.error('Error changing file mode:', err);
@@ -23,7 +23,7 @@ fs.chmod(filePath, 0o666, (err) => {
   });
 
 router.use(bodyParser.urlencoded({ extended: true }));
-router.use(express.static(path.resolve(__dirname, 'public')));//to access the files in public folder
+router.use(express.static(path.resolve(__dirname, 'tmp')));//to access the files in public folder
 router.use(express.json());
 
 router.use(cors({
