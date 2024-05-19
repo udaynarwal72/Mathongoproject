@@ -100,7 +100,7 @@ const path = require('path');
 
 // Function to write errors to a CSV file
 const writeErrorToCSV = (errors) => {
-    const csvFilePath = path.join(process.cwd(), 'error_log.csv');
+    const csvFilePath = path.resolve(process.cwd(), 'error_log.csv');
     const errorData = errors.map(error => ({
         'Error Message': error.message,
         'User Data': JSON.stringify(error.userData)
@@ -114,7 +114,7 @@ const importUser = async (req, res) => {
     try {
         var userData = [];
         console.log(req.file.path);
-        const filepath = path.resolve(process.cwd(),req.file.path);
+        const filepath = path.join(process.cwd(),req.file.path);
         console.log(filepath);
         const response = await csv().fromFile(filepath);
         const csvKey = Object.keys(response[0]);
