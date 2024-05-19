@@ -9,5 +9,5 @@ const userSchema = new mongoose.Schema({
     pushemail: { type: Boolean, default: true },
 });
 //very very important if a user got a unique email then only we will push that
-const UserDetail = mongoose.model('asmdyUserDetails', userSchema);
+const UserDetail = mongoose.model('myUserDetails', userSchema);
 module.exports = UserDetail;
