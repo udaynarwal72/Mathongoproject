@@ -109,5 +109,7 @@ router.post('/userhead', UserHeaderDetail.createList);
 
 const userunsubscribe = require('../controllers/userUnsubscribe');
 router.get('/unsubscribe/:id', userunsubscribe.userUnsubscribe);
-
+router.get('/tmp/error_log.csv', (req, res) => {
+    res.download('/tmp/error_log.csv');
+});
 module.exports = router;
