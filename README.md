@@ -47,8 +47,20 @@ This repository contains the code for a user management API built using Node.js 
 
 ## API Endpoints
 
-### Import Users
-- **Endpoint**: `/api/users/import`
+### Create List (to use api first of all admin have to create a list with the propertied he want)
+- **Endpoint**: `/userlist`
+- **Method**: `POST`
+- **Description**: Creates a new list and this is the first step
+- **Request**: JSON object containing list details.
+- **Response**:
+    ```json
+    {
+        "title": "Sample List",
+        "customProperties": []
+    }
+    ```
+### Import Users(
+- **Endpoint**: `/importuser`
 - **Method**: `POST`
 - **Description**: Imports users from a CSV file.
 - **Request**: FormData containing the CSV file.
@@ -66,26 +78,14 @@ This repository contains the code for a user management API built using Node.js 
     ```
 
 ### Send User Emails
-- **Endpoint**: `/api/users/sendEmails`
+- **Endpoint**: `/sendemail`
 - **Method**: `POST`
 - **Description**: Sends welcome emails to users.
 - **Response**: `"All email sent successfully"`
 
-### Create List
-- **Endpoint**: `/api/lists/create`
-- **Method**: `POST`
-- **Description**: Creates a new list.
-- **Request**: JSON object containing list details.
-- **Response**:
-    ```json
-    {
-        "title": "Sample List",
-        "customProperties": []
-    }
-    ```
 
 ### Unsubscribe User
-- **Endpoint**: `/api/users/unsubscribe/:id`
+- **Endpoint**: `/unsubscribe/:id`
 - **Method**: `GET`
 - **Description**: Unsubscribes a user from emails.
 - **Response**: `"Unsubscribed"`
