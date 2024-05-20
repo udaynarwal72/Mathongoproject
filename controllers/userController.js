@@ -105,7 +105,7 @@ const writeErrorToCSV = (errors) => {
     //     process.env.NODE_ENV === 'production' ? 'static' : 'public',
     //     'usercsv.csv'
     // )
-    const csvFilePath = path.resolve(process.pwd(), 'error_log.csv');
+    const csvFilePath = path.resolve('/tmp/', 'error_log.csv');
     const errorData = errors.map(error => ({
         'Error Message': error.message,
         'User Data': JSON.stringify(error.userData)
@@ -119,7 +119,7 @@ const importUser = async (req, res) => {
     try {
         var userData = [];
         console.log(req.file.path);
-        const filepath = req.file.path;
+        const filepath = path.resolve('/tmp/',req.file.path) ;
         console.log(filepath);
         const response = await csv().fromFile(filepath);
         const csvKey = Object.keys(response[0]);
