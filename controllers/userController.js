@@ -110,7 +110,8 @@ const writeErrorToCSV = (errors) => {
         'Error Message': error.message,
         'User Data': JSON.stringify(error.userData)
     }));
-    const csvContent = json2csv(errorData);
+
+    const csvContent = json2csv({data: errorData,fields: ['Error Message', 'User Data']});
     fs.writeFileSync(csvFilePath, csvContent, { flag: 'a' });
     return csvFilePath;
 };
