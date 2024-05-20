@@ -96,7 +96,7 @@ const userlist = require('../model/userlist');
 const csv = require('csvtojson');
 const json2csv = require('json2csv').parse;
 const fs = require('fs');
-const path = require('path' );
+const path = require('path');
 
 // Function to write errors to a CSV file
 const writeErrorToCSV = (errors) => {
@@ -119,7 +119,7 @@ const importUser = async (req, res) => {
     try {
         var userData = [];
         console.log(req.file.path);
-        const filepath = path.resolve('/tmp/',req.file.path) ;
+        const filepath =  req.file.path;
         console.log(filepath);
         const response = await csv().fromFile(filepath);
         const csvKey = Object.keys(response[0]);

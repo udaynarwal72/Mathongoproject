@@ -7,7 +7,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 router.use(bodyParser.urlencoded({ extended: true }));
-router.use(express.static(path.resolve('/tmp/', 'public')));//to access the files in public folder
+router.use(express.static(path.resolve(process.cwd(), 'public')));//to access the files in public folder
 router.use(express.json());
 
 router.use(cors({
@@ -19,7 +19,7 @@ router.use(cors({
 
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const pathway = path.resolve('/tmp/', 'public/uploads/');
+        const pathway = path.resolve(process.cwd(), 'public/uploads/');
         cb(null, pathway);
     },
     filename: (req, file, cb) => {
